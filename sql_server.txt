@@ -1,0 +1,95 @@
+ EXERCISE-1
+
+1.   select title_id, price as old_book_price, (price*20/100) as new_book_price from books;
+2.   select publisher_name, sum(totel_sale) as TotalSale from publishers;
+4.   select book_name from books where price between 20 and 55;
+5.    select category_name, sum(total_sale) as TotalSale from sales group by category_name;
+6.   select substring (title_id, patindex(‘%[0-9]%’, title_id), len(title_id) from title;
+7.   select emp_name from employee where hire_date >’1-12-90’  and datediff(yy,hire_date,’1-12-95’) between 4 and 6;
+8.   selectemp_name ,datepart(yy,hire_date) from employee;
+9.   select b.book_id, b.author_id, (price*(sum(s.sale))) as total_collection from book b, sale s group by s.sale;
+13.   select book_title, publisher_name, city_name from publishers where city_name like B%;
+16.   select book_name, max(royalty) from books;
+17.   select book_name from books where book_price > business_book_price;
+
+EXERCISE-2
+
+1.   CREATE table  My_Emp as Select * from Pub.Employee;
+2.   Update Employee Set last_Name= ‘Drexler’ where last_Name= ‘VPA30890F’;
+3.   Delete From My_Emp where name=’Paul Henriot’;
+4.   Update Employee Set job_id=14 where name= ‘PedroAfonso’;
+6.   Delete From Employee where job_id<5;
+
+EXERCISE -3
+
+DDL
+
+Member Table
+
+CREATE TABLE `member` (
+  `Member_ID` int(10) NOT NULL,
+  `First_Name` varchar(25) NOT NULL,
+  `Last_Name` varchar(25) DEFAULT NULL,
+  `Address` varchar(100) DEFAULT NULL,
+  `City` varchar(30) DEFAULT NULL,
+  `Phone` varchar(15) DEFAULT NULL,
+  `Join_Date` datetime NOT NULL,
+  PRIMARY KEY (`Member_ID`),
+  UNIQUE KEY `Member_ID_UNIQUE` (`Member_ID`) );
+
+Title Table
+
+CREATE TABLE `title` (
+  `Title_ID` int(11) NOT NULL,
+  `Title` varchar(60) NOT NULL,
+  `Description` varchar(400) NOT NULL,
+  `Rating` varchar(4) DEFAULT NULL,
+  `Category` varchar(15) DEFAULT NULL,
+  `Release_Date` datetime DEFAULT NULL,
+  PRIMARY KEY (`Title_ID`),
+  UNIQUE KEY `Title_ID_UNIQUE` (`Title_ID`) );
+
+Title Copy Table
+
+CREATE TABLE `title_copy` (
+  `Copy_ID` int(11) NOT NULL,
+  `Title_ID` int(11) NOT NULL,
+  `Status` varchar(15) NOT NULL,
+  PRIMARY KEY (`Copy_ID`,`Title_ID`),
+  UNIQUE KEY `Title_ID_UNIQUE` (`Title_ID`) 
+  UNIQUE KEY `Copy_ID_UNIQUE` (`Copy_ID`),
+  CONSTRAINT `Title_ID` FOREIGN KEY (`Title_ID`) REFERENCES `title` (`title_id`) );
+
+Rental Table
+
+CREATE TABLE `rental` (
+  `Book_Date` datetime NOT NULL,
+  `Member_ID` int(11) NOT NULL,
+  `Copy_ID` int(11) NOT NULL,
+  `Act_Ret_Date` datetime DEFAULT NULL,
+  `Exp_Act_Date` datetime DEFAULT NULL,
+  `Title_ID` varchar(45) NOT NULL,
+  PRIMARY KEY (`Book_Date`,`Member_ID`,`Copy_ID`,`Title_ID`),
+  CONSTRAINT `Member_ID` FOREIGN KEY (`Member_ID`) REFERENCES `member` (`member_id`),
+  CONSTRAINT ` Copy_ID ` FOREIGN KEY (`Copy_ID `) REFERENCES `title_copy` (`copy_id`),
+  CONSTRAINT ` Title_ID ` FOREIGN KEY (`Title_ID `) REFERENCES `title_copy` (`title_id `));
+
+Reservation Table
+
+CREATE TABLE `reservation ` (
+  `RES_Date` datetime NOT NULL,
+  `Title_ID` int(11) NOT NULL,
+  `Member_ID` int(11) NOT NULL,
+  PRIMARY KEY (`RES_Date `,`Title_ID`,`Member_ID`),
+  UNIQUE KEY ` RES_Date _UNIQUE` (`RES_Date `) 
+  UNIQUE KEY ` Member_ID _UNIQUE` (`Member_ID `),
+  CONSTRAINT `Title_ID` FOREIGN KEY (`Title_ID`) REFERENCES `title` (`title_id`) 
+  CONSTRAINT ` Member_ID ` FOREIGN KEY (`Member_ID`) REFERENCES `member` (`member_id`));
+
+EXERCISE -4
+
+VIEWS
+
+1.   CREATE  VIEW Title_View  as SELECT Title_Num, Title_Name as BookName, pub_num FROM Title, Publisher;
+3.   CREATE VIEW Pub_City  as  SELECT T.Title_Id, T.Title_Name, P.pub_num FROM Title T, Publisher P where T.Release_Date=0877;
+4.   CREATE VIEW City as Select P.pub_num, P.pub_type, T.Title from Title T , Publisher P where P.City=’USA’ and T.Title_Id=(Select Title_Id from Title) ;
